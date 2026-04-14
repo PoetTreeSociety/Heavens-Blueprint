@@ -1,899 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Cloud, 
-  Moon, 
-  Sun, 
-  Crown, 
-  Waves, 
-  ArrowDownCircle, 
-  Sparkles, 
-  Swords, 
-  BookOpen, 
-  Info, 
-  Map, 
-  RotateCcw,
-  Eye, 
-  EyeOff, 
-  ChevronUp, 
-  ChevronDown, 
-  Compass, 
-  Zap, 
-  MessageCircle,
-  X,
-  Maximize2,
-  Users,
-  Search,
-  ShieldAlert
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House of the LORD Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide-react@latest"></script>
 
-// --- ASSETS ---
-const CHURCH_LOGO = "https://www.dropbox.com/scl/fi/brntptlhom2rd3o0q4adu/Png.png?rlkey=dbwie5kif5j9g4gt0rhr1p03o&st=diczpn53&raw=1";
-
-// --- DATA MODEL ---
-const COURSE_DATA = [
-  {
-    id: 'overview',
-    week: 'Intro',
-    title: "Heaven's Blueprint",
-    subtitle: "System Architecture",
-    icon: <Map className="w-4 h-4" />,
-    gradient: 'from-slate-600 via-slate-700 to-indigo-950',
-    border: 'border-slate-500/30',
-    concept: 'The House of the LORD is more than a model; it is the master-template of reality. By decoding this ancient architectural vision, we rediscover our legal standing in the courts of heaven and our defensive posture against the chaos of the deep. Step into the Blueprint to walk through the living corridors of the Biblical Cosmos.',
-    image: 'https://www.dropbox.com/scl/fi/xnuw7xls8jz6vx152fiqd/image_1776073937577.jpeg?rlkey=evoye92pju47ybe0i64lb1ox9&st=472o5p5v&raw=1',
-    verses: [
-      { ref: 'Deu 10:14', summary: 'Heaven of Heavens.', full: 'Behold, to the Lord your God belong heaven and the heaven of heavens, the earth with all that is in it.' },
-      { ref: '1 Kings 8:27', summary: 'Beyond Containment.', full: 'But will God indeed dwell on the earth? Behold, heaven and the highest heaven cannot contain you; how much less this house that I have built!' },
-      { ref: '2 Chron 2:6', summary: 'Infinite Scope.', full: 'But who is able to build him a house, since heaven, even highest heaven, cannot contain him?' },
-      { ref: 'Nehemiah 9:6', summary: 'The Preserver of All.', full: 'You are the Lord, you alone. You have made heaven, the heaven of heavens, with all their host... and you preserve all of them.' },
-      { ref: 'Psalm 148:4', summary: 'Highest Heights.', full: 'Praise him, you highest heavens, and you waters above the heavens!' }
-    ],
-    beings: [],
-    discussions: [
-      'How does having a visual "map" of the cosmos change the way you read individual Bible stories?',
-      'Why do you think ancient people thought of the world in "stories" rather than just a flat physical plane?',
-      'If the House of the LORD is the blueprint for reality, how does your daily schedule currently align with its structural priorities?'
-    ],
-    bgPosition: 'center 40%',
-    bgSize: 'cover'
-  },
-  {
-    id: 'firstFloor',
-    week: 'Week 1',
-    title: 'First Floor',
-    subtitle: "Atmospheric Horizon",
-    icon: <Cloud className="w-4 h-4" />,
-    gradient: 'from-sky-300 via-blue-500 to-cyan-600',
-    bgDark: 'bg-sky-900/20',
-    border: 'border-sky-400/40',
-    concept: 'The immediate interface. The breathable space where divine providence meets human necessity. This is our starting point in the heavens.',
-    verses: [
-      { ref: 'Gen 1:6–8', summary: 'The Firmament.', full: 'God said, "Let there be an expanse in the midst of the waters... And God called the expanse Heaven."' },
-      { ref: 'Gen 19:1', summary: 'The Angelos.', full: 'The two angels came to Sodom in the evening, and Lot was sitting in the gate of Sodom.' },
-      { ref: 'Ps 91:11', summary: 'Guardian Spirits.', full: 'For he will command his angels concerning you to guard you in all your ways.' },
-      { ref: 'Ps 104:4', summary: 'Wind Spirits.', full: 'He makes his messengers winds, his ministers a flaming fire.' },
-      { ref: 'Acts 1:9', summary: 'The Cloud Portal.', full: 'He was lifted up, and a cloud took him out of their sight.' },
-      { ref: '1 Thess 4:17', summary: 'Meeting in the Air.', full: 'Then we who are alive... will be caught up together with them in the clouds to meet the Lord in the air.' }
-    ],
-    beings: [
-      { 
-        name: "Angelos (Messengers)", 
-        context: "The most common contact for humans. They function as postal workers and logistical agents between realms, appearing in the breathable sky.",
-        scriptures: [
-          { ref: "Genesis 19:1", text: "The two angels came to Sodom in the evening..." },
-          { ref: "Psalm 91:11", text: "For he will command his angels concerning you to guard you in all your ways." },
-          { ref: "Matthew 28:2", text: "For an angel of the Lord descended from heaven and came and rolled back the stone and sat on it." },
-          { ref: "Luke 1:11", text: "And there appeared to him an angel of the Lord standing on the right side of the altar of incense." },
-          { ref: "Hebrews 13:2", text: "Do not neglect to show hospitality to strangers, for thereby some have entertained angels unawares." }
-        ]
-      },
-      { 
-        name: "Guardian Spirits", 
-        context: "Individualized spiritual details assigned to protect and represent specific people or groups on the earthly plane.",
-        scriptures: [
-          { ref: "Genesis 48:16", text: "The angel who has redeemed me from all evil, bless the boys." },
-          { ref: "Exodus 23:20", text: "Behold, I send an angel before you to guard you on the way and to bring you to the place that I have prepared." },
-          { ref: "Psalm 91:11", text: "For he will command his angels concerning you to guard you in all your ways." },
-          { ref: "Daniel 10:13", text: "But Michael, one of the chief princes, came to help me..." },
-          { ref: "Matthew 18:10", text: "See that you do not despise one of these little ones... their angels in heaven always see the face of my Father." },
-          { ref: "Acts 12:15", text: "They said, 'It is his angel!' regarding Peter appearing at the door." }
-        ]
-      },
-      { 
-        name: "Wind Spirits", 
-        context: "Spiritual forces manifested through natural elements like wind and fire, utilizing the first-floor atmospheric mechanics.",
-        scriptures: [
-          { ref: "Psalm 104:4", text: "He makes his messengers winds, his ministers a flaming fire." },
-          { ref: "Ezekiel 1:4", text: "As I looked, behold, a stormy wind came out of the north, and a great cloud with brightness around it." },
-          { ref: "Daniel 7:2", text: "I saw in my vision by night, and behold, the four winds of heaven were stirring up the great sea." },
-          { ref: "Zechariah 6:5", text: "And the chariot-driver answered and said to me, 'These are going out to the four winds of heaven.'" },
-          { ref: "Hebrews 1:7", text: "Of the angels he says, 'He makes his angels winds, and his ministers a flame of fire.'" }
-        ]
-      }
-    ],
-    discussions: [
-      'Why is our "First Floor" sky the primary place we look for signs of the Divine?',
-      'In what ways does the breathable atmosphere reflect God’s immediate care for our survival?',
-      'In a world of constant digital noise, how can we intentionally tune our senses to the "Cloud Portals" where God is actively moving today?'
-    ],
-    bgPosition: 'center 56%',
-    bgSize: '380%'
-  },
-  {
-    id: 'secondFloor',
-    week: 'Week 2',
-    title: 'Second Floor',
-    subtitle: "Celestial Expanse",
-    icon: <Moon className="w-4 h-4" />,
-    gradient: 'from-indigo-600 via-purple-800 to-black',
-    textLight: true,
-    bgDark: 'bg-indigo-900/40',
-    border: 'border-indigo-500/40',
-    concept: 'The cosmic buffer. A display of mathematical precision and creative magnitude that silences human pride.',
-    verses: [
-      { ref: 'Gen 1:16', summary: 'Two Great Lights.', full: 'And God made the two great lights—the greater light to rule the day and the lesser light to rule the night—and the stars.' },
-      { ref: 'Job 38:7', summary: 'The Morning Stars.', full: 'When the morning stars sang together and all the sons of God shouted for joy?' },
-      { ref: 'Ps 19:1', summary: 'Celestial Proclamation.', full: 'The heavens declare the glory of God, and the sky above proclaims his handiwork.' },
-      { ref: 'Ps 147:4', summary: 'Host by Number.', full: 'He determines the number of the stars; he gives to all of them their names.' },
-      { ref: 'Isa 40:26', summary: 'Celestial Hosts.', full: 'Lift up your eyes on high and see: who created these? He who brings out their host by number.' },
-      { ref: 'Dan 4:17', summary: 'The Watchers (Irîn).', full: 'The sentence is by the decree of the watchers, the decision by the word of the holy ones.' }
-    ],
-    beings: [
-      { 
-        name: "Morning Stars", 
-        context: "Primordial celestial beings who witnessed and celebrated the foundation of the world. Often linked to the light-bearers of the dawn and the earliest choral praise of the cosmos.",
-        scriptures: [
-          { ref: "Job 38:7", text: "When the morning stars sang together and all the sons of God shouted for joy?" },
-          { ref: "Isaiah 14:12", text: "How you are fallen from heaven, O Day Star, son of Dawn! How you are cut down to the ground, you who laid the nations low!" },
-          { ref: "2 Peter 1:19", text: "And we have the prophetic word more fully confirmed... until the day dawns and the morning star rises in your hearts." },
-          { ref: "Revelation 2:28", text: "And I will give him the morning star." },
-          { ref: "Revelation 22:16", text: "I, Jesus, have sent my angel to testify to you about these things for the churches. I am the root and the descendant of David, the bright morning star." }
-        ]
-      },
-      { 
-        name: "Irîn (The Watchers)", 
-        context: "High-ranking sentinels with long-term monitoring assignments over the physical and spiritual boundaries of the cosmic expanse.",
-        scriptures: [
-          { ref: "Daniel 4:13", text: "I saw in the visions of my head... and behold, a watcher, a holy one, came down from heaven." },
-          { ref: "Daniel 4:17", text: "The sentence is by the decree of the watchers, the decision by the word of the holy ones." },
-          { ref: "Daniel 4:23", text: "And because the king saw a watcher, a holy one, coming down from heaven..." },
-          { ref: "2 Peter 2:4", text: "For if God did not spare angels when they sinned, but cast them into hell and committed them to chains..." },
-          { ref: "Jude 1:6", text: "And the angels who did not stay within their own position of authority, but left their proper dwelling..." }
-        ]
-      },
-      { 
-        name: "Celestial Hosts", 
-        context: "The spiritual identities associated with the stars and planetary bodies, functioning as a synchronized 'army' of lights.",
-        scriptures: [
-          { ref: "Judges 5:20", text: "From heaven the stars fought, from their courses they fought against Sisera." },
-          { ref: "Psalm 147:4", text: "He determines the number of the stars; he gives to all of them their names." },
-          { ref: "Psalm 148:2", text: "Praise him, all his angels; praise him, all his hosts!" },
-          { ref: "Isaiah 40:26", text: "He who brings out their host by number, calling them all by name; by the greatness of his might and because he is strong in power, not one is missing." },
-          { ref: "Daniel 8:10", text: "It grew great, even to the host of heaven. And some of the host and some of the stars it threw down to the ground." }
-        ]
-      }
-    ],
-    discussions: [
-      'If God names the trillions of stars, what does that tell you about His attention to your details?',
-      'Does the vastness of space make God feel further away or more capable of handling your life?',
-      'If the stars are a "heavenly host" with names and assignments, does it change how you view the "random" events in your own life’s orbit?'
-    ],
-    bgPosition: 'center 40%',
-    bgSize: '350%'
-  },
-  {
-    id: 'thirdFloor',
-    week: 'Week 3',
-    title: 'Third Floor',
-    subtitle: "The Kingdom Domain",
-    icon: <Sparkles className="w-4 h-4" />,
-    gradient: 'from-blue-300 via-sky-500 to-indigo-700',
-    bgDark: 'bg-blue-900/20',
-    border: 'border-blue-400/40',
-    concept: 'God’s primary dwelling. The administrative realm where believers are positioned legally and spiritually alongside the King.',
-    verses: [
-      { ref: 'Job 1:6', summary: 'Sons of God.', full: 'Now there was a day when the sons of God came to present themselves before the Lord.' },
-      { ref: 'Ps 103:21', summary: 'Host of Heaven.', full: 'Bless the Lord, all his hosts, his ministers, who do his will!' },
-      { ref: 'Dan 10:13', summary: 'Archangelos.', full: 'But Michael, one of the chief princes, came to help me.' },
-      { ref: 'John 14:2', summary: 'My Father\'s House.', full: 'In my Father\'s house are many rooms... I go to prepare a place for you.' },
-      { ref: 'Eph 2:6', summary: 'Seated With Him.', full: 'He raised us up with him and seated us with him in the heavenly places in Christ Jesus.' },
-      { ref: 'Heb 12:22', summary: 'City of the Living God.', full: 'But you have come to Mount Zion and to the city of the living God, the heavenly Jerusalem.' }
-    ],
-    beings: [
-      { 
-        name: "The Host of Heaven", 
-        context: "The vast military and administrative array of celestial beings under God's command. They represent the sheer volume and order of the created spiritual world, operating within the King's domain.",
-        scriptures: [
-          { ref: "1 Kings 22:19", text: "I saw the Lord sitting on his throne, and all the host of heaven standing beside him on his right hand and on his left." },
-          { ref: "Nehemiah 9:6", text: "You are the Lord, you alone... the heaven of heavens, with all their host... and the host of heaven worships you." },
-          { ref: "Psalm 33:6", text: "By the word of the Lord the heavens were made, and by the breath of his mouth all their host." },
-          { ref: "Psalm 103:21", text: "Bless the Lord, all his hosts, his ministers, who do his will!" },
-          { ref: "Luke 2:13", text: "And suddenly there was with the angel a multitude of the heavenly host praising God." }
-        ]
-      },
-      { 
-        name: "Archangelos (Chief Princes)", 
-        context: "High-tier commanders who represent entire nations, lead celestial warfare, and deliver the most critical cosmic decrees.",
-        scriptures: [
-          { ref: "Daniel 10:13", text: "Michael, one of the chief princes, came to help me, for I was left there with the kings of Persia." },
-          { ref: "Daniel 12:1", text: "At that time shall arise Michael, the great prince who has charge of your people." },
-          { ref: "1 Thessalonians 4:16", text: "For the Lord himself will descend from heaven with a cry of command, with the voice of an archangel." },
-          { ref: "Jude 1:9", text: "But when the archangel Michael, contending with the devil, was disputing about the body of Moses..." },
-          { ref: "Revelation 12:7", text: "Now war arose in heaven, Michael and his angels fighting against the dragon." }
-        ]
-      },
-      { 
-        name: "Sons of God", 
-        context: "The inner circle of spiritual beings (Bene Elohim) who report directly to the Father's administration and formed the original council of the morning.",
-        scriptures: [
-          { ref: "Genesis 6:2", text: "The sons of God saw that the daughters of man were attractive. And they took as their wives any they chose." },
-          { ref: "Deuteronomy 32:8", text: "He set the boundaries of the peoples according to the number of the sons of God (LXX/DSS)." },
-          { ref: "Job 1:6", text: "Now there was a day when the sons of God came to present themselves before the Lord." },
-          { ref: "Job 2:1", text: "Again there was a day when the sons of God came to present themselves before the Lord." },
-          { ref: "Job 38:7", text: "When the morning stars sang together and all the sons of God shouted for joy?" }
-        ]
-      }
-    ],
-    discussions: [
-      'If we are "seated" here now, why do we live as if we are still in the "Basement"?',
-      'How does the reality of a "prepared place" change your current sense of belonging?',
-      'Since your legal citizenship is already verified in this domain, what "embassy powers" should you be exercising in your current earthly circumstances?'
-    ],
-    bgPosition: 'center 22%',
-    bgSize: '350%'
-  },
-  {
-    id: 'attic',
-    week: 'Week 4',
-    title: 'The Attic',
-    subtitle: "Divine Command Center",
-    icon: <Crown className="w-5 h-5" />,
-    gradient: 'from-amber-200 via-yellow-400 to-amber-700',
-    bgDark: 'bg-amber-900/20',
-    border: 'border-amber-500/40',
-    concept: 'The highest point of spiritual architecture. The source of all sovereign decree and the epicentre of unceasing, high-frequency worship.',
-    verses: [
-      { ref: 'Gen 3:24', summary: 'The Cherubim.', full: 'He drove out the man, and at the east of the garden of Eden he placed the cherubim and a flaming sword.' },
-      { ref: '1 Kings 22:19', summary: 'The Divine Council.', full: 'I saw the Lord sitting on his throne, and all the host of heaven standing beside him on his right hand and on his left.' },
-      { ref: 'Isaiah 6:2', summary: 'The Seraphim.', full: 'Above him stood the seraphim. Each had six wings... and one called to another: "Holy, holy, holy is the Lord of hosts."' },
-      { ref: 'Eze 10:12', summary: 'The Ophanim (Wheels).', full: 'And their whole body, their rims, and their spokes, and the wheels were full of eyes all around.' },
-      { ref: 'Rev 4:4', summary: 'The 24 Elders.', full: 'Around the throne were twenty-four thrones, and seated on the thrones were twenty-four elders.' },
-      { ref: 'Rev 4:6-7', summary: 'The Zoa (Living Creatures).', full: 'Around the throne... are four living creatures, full of eyes... like a lion, an ox, a man, and an eagle.' }
-    ],
-    beings: [
-      { 
-        name: "Cherubim", 
-        context: "Living guardians of divine presence. They are the 'chariot' and structural bearers of the glory of God in the Holy of Holies.",
-        scriptures: [
-          { ref: "Genesis 3:24", text: "He drove out the man, and at the east of the garden of Eden he placed the cherubim and a flaming sword." },
-          { ref: "Exodus 25:18", text: "And you shall make two cherubim of gold; of hammered work shall you make them, on the two ends of the mercy seat." },
-          { ref: "Psalm 18:10", text: "He rode on a cherub and flew; he came swiftly on the wings of the wind." },
-          { ref: "Ezekiel 10:1", text: "Then I looked, and behold, on the expanse that was over the heads of the cherubim there appeared... something like a throne." },
-          { ref: "Ezekiel 28:14", text: "You were an anointed guardian cherub. I placed you; you were on the holy mountain of God." }
-        ]
-      },
-      { 
-        name: "Divine Council", 
-        context: "The deliberative assembly of spiritual beings who meet at the highest tier of the 'House' to hear, see, and execute the will of the King through corporate participation in divine decrees.",
-        scriptures: [
-          { ref: "1 Kings 22:19", text: "I saw the Lord sitting on his throne, and all the host of heaven standing beside him on his right hand and on his left." },
-          { ref: "Job 1:6", text: "Now there was a day when the sons of God came to present themselves before the Lord." },
-          { ref: "Psalm 82:1", text: "God has taken his place in the divine council; in the midst of the gods he holds judgment." },
-          { ref: "Psalm 89:7", text: "A God greatly to be feared in the council of the holy ones, and awesome above all who are around him." },
-          { ref: "Jeremiah 23:18", text: "For who among them has stood in the council of the Lord to see and to hear his word?" }
-        ]
-      },
-      { 
-        name: "Seraphim (Burning Ones)", 
-        context: "Creatures of intense light and fire who guard the holiness of the Throne through unceasing worship, often appearing as 'flaming ones'.",
-        scriptures: [
-          { ref: "Isaiah 6:2", text: "Above him stood the seraphim. Each had six wings: with two he covered his face, and with two he covered his feet, and with two he flew." },
-          { ref: "Isaiah 6:3", text: "And one called to another and said: 'Holy, holy, holy is the Lord of hosts; the whole earth is full of his glory!'" },
-          { ref: "Isaiah 6:6", text: "Then one of the seraphim flew to me, having in his hand a burning coal that he had taken with tongs from the altar." },
-          { ref: "Isaiah 6:7", text: "And he touched my mouth and said: 'Behold, this has touched your lips; your guilt is taken away, and your sin atoned for.'" },
-          { ref: "Revelation 4:8", text: "And the four living creatures, each of them with six wings, are full of eyes all around and within." }
-        ]
-      },
-      { 
-        name: "Ophanim (The Wheels)", 
-        context: "Celestial 'Wheels within Wheels' covered in eyes that accompany the Living Creatures. They represent the omni-directional mobility and omnipresence of the Divine Throne.",
-        scriptures: [
-          { ref: "Ezekiel 1:15", text: "As I looked at the living creatures, I saw a wheel on the earth beside the living creatures, one for each of the four of them." },
-          { ref: "Ezekiel 1:16", text: "The appearance of the wheels... their appearance and their construction being as it were a wheel within a wheel." },
-          { ref: "Ezekiel 1:18", text: "And their rims were tall and awesome, and the rims of all four were full of eyes all around." },
-          { ref: "Ezekiel 1:21", text: "When those went, these went; and when those stood, these stood... for the spirit of the living creatures was in the wheels." },
-          { ref: "Ezekiel 10:12", text: "And their whole body, their rims, and their spokes, and the wheels were full of eyes all around—the wheels that the four of them had." }
-        ]
-      },
-      { 
-        name: "The 24 Elders", 
-        context: "Glorified representatives or high-ranking celestial leaders who sit on thrones surrounding the central Throne. They cast their crowns in recognition of ultimate sovereignty.",
-        scriptures: [
-          { ref: "Revelation 4:4", text: "Around the throne were twenty-four thrones, and seated on the thrones were twenty-four elders, clothed in white garments, with golden crowns on their heads." },
-          { ref: "Revelation 4:10", text: "The twenty-four elders fall down before him who is seated on the throne and worship him who lives forever and ever. They cast their crowns before the throne..." },
-          { ref: "Revelation 5:8", text: "The four living creatures and the twenty-four elders fell down before the Lamb, each holding a harp and golden bowls full of incense, which are the prayers of the saints." },
-          { ref: "Revelation 11:16", text: "And the twenty-four elders who sit on their thrones before God fell on their faces and worshiped God." },
-          { ref: "Revelation 19:4", text: "And the twenty-four elders and the four living creatures fell down and worshiped God who was seated on the throne, saying, 'Amen. Hallelujah!'" }
-        ]
-      },
-      { 
-        name: "The Zoa (Four Living Creatures)", 
-        context: "Representatives of the fullness of all creation—humanity, wild beasts, domestic beasts, and birds—stationed around the center of the throne.",
-        scriptures: [
-          { ref: "Revelation 4:6", text: "And around the throne, on each side of the throne, are four living creatures, full of eyes in front and behind." },
-          { ref: "Revelation 4:7", text: "The first living creature like a lion, the second like an ox, the third with the face of a man, and the fourth like an eagle." },
-          { ref: "Revelation 4:8", text: "And the four living creatures... day and night they never cease to say, 'Holy, holy, holy, is the Lord God Almighty.'" },
-          { ref: "Revelation 5:6", text: "And between the throne and the four living creatures and among the elders I saw a Lamb standing..." },
-          { ref: "Revelation 19:4", text: "And the twenty-four elders and the four living creatures fell down and worshiped God who was seated on the throne." }
-        ]
-      }
-    ],
-    discussions: [
-      'What is the relationship between the Throne Room and the unceasing worship we see in Revelation?',
-      'In what way is the "Attic" the command center for the entire house?',
-      'How would your perspective on earthly chaos shift if you spent the first five minutes of every day consciously standing in the frequency of the unceasing Throne Room worship?'
-    ],
-    bgPosition: 'center 5%',
-    bgSize: '350%'
-  },
-  {
-    id: 'basement',
-    week: 'Week 5',
-    title: 'The Basement',
-    subtitle: "The Subterranean Abyss",
-    icon: <ArrowDownCircle className="w-4 h-4" />,
-    gradient: 'from-orange-700 via-red-900 to-black',
-    textLight: true,
-    bgDark: 'bg-red-900/40',
-    border: 'border-orange-700/40',
-    concept: 'The structural foundations of judgment. The realm of Sheol and the holding place of the rebellious dead.',
-    verses: [
-      { ref: 'Numbers 16:33', summary: 'Subterranean Descent.', full: 'They and all that belonged to them went down alive into Sheol, and the earth closed over them.' },
-      { ref: 'Job 26:6', summary: 'The Destroyer Abaddon.', full: 'Sheol is naked before God, and Abaddon has no covering.' },
-      { ref: 'Psalm 139:8', summary: 'Omnipresent Reach.', full: 'If I ascend to heaven, you are there! If I make my bed in Sheol, you are there!' },
-      { ref: 'Isaiah 14:9', summary: 'Shades in Sheol.', full: 'Sheol beneath is stirred up to meet you... it rouses the shades to greet you.' },
-      { ref: 'Jonah 2:6', summary: 'The Roots of Mountains.', full: 'I went down to the land whose bars closed upon me forever; yet you brought up my life from the pit.' },
-      { ref: 'Revelation 1:18', summary: 'Keys of Death and Hades.', full: 'I died, and behold I am alive forevermore, and I have the keys of Death and Hades.' }
-    ],
-    beings: [
-      { 
-        name: "Shades (Rephaim)", 
-        context: "The 'sunken ones.' Spirits of the deceased, specifically the rebellious ancient giants and kings who inhabit the depths of Sheol.",
-        scriptures: [
-          { ref: "Job 26:5", text: "The shades tremble beneath the waters and the inhabitants thereof." },
-          { ref: "Psalm 88:10", text: "Do you work wonders for the dead? Do the departed (shades) rise up to praise you?" },
-          { ref: "Proverbs 2:18", text: "For her house sinks down to death, and her paths to the shades." },
-          { ref: "Isaiah 14:9", text: "Sheol beneath is stirred up to meet you... it rouses the shades to greet you, all who were leaders of the earth." },
-          { ref: "Isaiah 26:14", text: "They are dead, they will not live; they are shades, they will not arise." }
-        ]
-      },
-      { 
-        name: "Abaddon (The Destroyer)", 
-        context: "The angel of the bottomless pit, associated with the personification of destruction and the gatekeeper of the abyss.",
-        scriptures: [
-          { ref: "Job 26:6", text: "Sheol is naked before God, and Abaddon has no covering." },
-          { ref: "Job 31:12", text: "For that would be a fire that consumes as far as Abaddon, and it would burn to the root all my increase." },
-          { ref: "Psalm 88:11", text: "Is your steadfast love declared in the grave, or your faithfulness in Abaddon?" },
-          { ref: "Proverbs 15:11", text: "Sheol and Abaddon lie open before the Lord; how much more the hearts of the children of man!" },
-          { ref: "Revelation 9:11", text: "They have as king over them the angel of the bottomless pit. His name in Hebrew is Abaddon." }
-        ]
-      }
-    ],
-    discussions: [
-      'How does the descent of Christ into the Basement redefine our fear of death?',
-      'Why is it important that God "holds the keys" to this level of the house?',
-      'If God’s presence reaches even into the deepest abyss, what part of your history or "shadow self" have you been hiding that He is actually ready to reclaim?'
-    ],
-    bgPosition: 'center 76%',
-    bgSize: '400%'
-  },
-  {
-    id: 'lake',
-    week: 'Week 6',
-    title: 'The Lake',
-    subtitle: "The Marine Kingdom",
-    icon: <Waves className="w-4 h-4" />,
-    gradient: 'from-teal-600 via-cyan-800 to-blue-950',
-    textLight: true,
-    bgDark: 'bg-teal-900/40',
-    border: 'border-teal-500/40',
-    concept: 'External chaos. The deep waters where Leviathan and the spirits of rebellion reside outside the "House."',
-    verses: [
-      { ref: 'Job 41:1', summary: 'Leviathan Anatomy.', full: 'Can you draw out Leviathan with a fishhook? ... His sneezings flash forth light.' },
-      { ref: 'Psalm 74:13', summary: 'Heads of Sea Monsters.', full: 'You divided the sea by your might; you broke the heads of the sea monsters on the waters.' },
-      { ref: 'Psalm 89:9', summary: 'Ruling the Raging Sea.', full: 'You rule the raging of the sea; when its waves rise, you still them.' },
-      { ref: 'Psalm 104:25', summary: 'The Sea Great and Wide.', full: 'Here is the sea, great and wide, which teems with creatures innumerable.' },
-      { ref: 'Isaiah 51:9', summary: 'Rahab the Dragon.', full: 'Was it not you who cut Rahab in pieces, who pierced the dragon?' },
-      { ref: 'Rev 13:1', summary: 'The Beast from the Sea.', full: 'And I saw a beast rising out of the sea, with ten horns and seven heads.' }
-    ],
-    beings: [
-      { 
-        name: "Leviathan", 
-        context: "The multi-headed twisting serpent representing primordial chaos that only God can taming and utilize for His purposes.",
-        scriptures: [
-          { ref: "Job 3:8", text: "Let those curse it who curse the day, who are ready to rouse up Leviathan." },
-          { ref: "Job 41:1", text: "Can you draw out Leviathan with a fishhook or press down his tongue with a cord?" },
-          { ref: "Psalm 74:14", text: "You crushed the heads of Leviathan; you gave him as food for the creatures of the wilderness." },
-          { ref: "Psalm 104:26", text: "There go the ships, and Leviathan, which you formed to play in it." },
-          { ref: "Isaiah 27:1", text: "In that day the Lord... will punish Leviathan the fleeing serpent, Leviathan the twisting serpent, and he will slay the dragon that is in the sea." }
-        ]
-      },
-      { 
-        name: "Rahab (Sea Dragon)", 
-        context: "A symbol of cosmic and national rebellion, depicted as a dragon cut to pieces by God to establish architectural order.",
-        scriptures: [
-          { ref: "Job 26:12", text: "By his power he stilled the sea; by his understanding he shattered Rahab." },
-          { ref: "Psalm 87:4", text: "Among those who know me I mention Rahab and Babylon; behold, Philistia and Tyre, with Cush." },
-          { ref: "Psalm 89:10", text: "You crushed Rahab like a carcass; you scattered your enemies with your mighty arm." },
-          { ref: "Isaiah 30:7", text: "Egypt's help is worthless and empty; therefore I have called her 'Rahab who sits still.'" },
-          { ref: "Isaiah 51:9", text: "Was it not you who cut Rahab in pieces, who pierced the dragon?" }
-        ]
-      }
-    ],
-    discussions: [
-      'Why is the "Lake" used as the primary metaphor for nations in rebellion?',
-      'If the House is order, and the Lake is chaos, where do you find yourself spending most of your focus?',
-      'If Leviathan is merely a "pet" that God plays with, why do we allow the chaotic "seas" of culture or politics to intimidate our peace?'
-    ],
-    bgPosition: '90% 90%',
-    bgSize: '400%'
-  }
-];
-
-const CROSS_CUTTING_DATA = {
-  angels: {
-    title: "Angels",
-    concept: "Messengers and warriors moving throughout the architecture.",
-    verses: [
-      { ref: 'Psalm 91:11', summary: 'Commanding Angels.', text: 'He will command his angels concerning you to guard you.' },
-      { ref: 'Psalm 103:20', summary: 'Mighty Ones.', text: 'Bless the Lord, O you his angels, you mighty ones who do his word.' },
-      { ref: 'Hebrews 1:14', summary: 'Ministering Spirits.', text: 'Sent out to serve for the sake of those or to inherit salvation.' }
-    ]
-  },
-  warfare: {
-    title: "Warfare",
-    concept: "Conflict in 'heavenly places' impacting the physical realm.",
-    verses: [
-      { ref: 'Daniel 10:13', summary: 'Prince of Persia.', text: 'The prince of the kingdom of Persia withstood me twenty-one days.' },
-      { ref: '2 Cor 10:4', summary: 'Divine Weaponry.', text: 'The weapons of our warfare are not of the flesh but have divine power.' },
-      { ref: 'Eph 6:12', summary: 'Heavenly Wrestling.', text: 'We wrestle... against the rulers... in the heavenly places.' }
-    ]
-  }
-};
-
-// --- COMPONENTS ---
-
-const MoteOverlay = ({ color }) => (
-  <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden opacity-20">
-    {[...Array(15)].map((_, i) => (
-      <div 
-        key={i}
-        className="absolute rounded-full blur-[1px] animate-float"
-        style={{
-          width: Math.random() * 3 + 'px',
-          height: Math.random() * 3 + 'px',
-          backgroundColor: color || '#fff',
-          left: Math.random() * 100 + '%',
-          top: Math.random() * 100 + '%',
-          animationDuration: Math.random() * 10 + 10 + 's',
-          animationDelay: Math.random() * 5 + 's'
-        }}
-      />
-    ))}
-  </div>
-);
-
-const AngelFlightOverlay = () => {
-  return (
-    <div className="absolute inset-0 pointer-events-none z-[65] overflow-hidden">
-      {[...Array(6)].map((_, i) => (
-        <div 
-          key={i} 
-          className="absolute opacity-0 animate-angel-fly"
-          style={{
-            left: `${Math.random() * 80 + 10}%`,
-            animationDuration: `${Math.random() * 20 + 20}s`,
-            animationDelay: `${Math.random() * 15}s`,
-          }}
-        >
-          <div className="relative blur-[0.5px]">
-            <div className="absolute -inset-4 bg-cyan-400/10 blur-xl rounded-full" />
-            <svg 
-              width="40" height="40" viewBox="0 0 24 24" 
-              className="text-white/30 fill-white/10 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
-            >
-              <path d="M12 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm-4 11s-2-1-2-4 2-4 2-4l4 4 4-4s2 1 2 4-2 4-2 4M9 14l-2 8h2l3-6 3 6h2l-2-8-3-2-3 2Z" />
-            </svg>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const ScriptureCard = ({ verse, bgDark, border }) => {
-  const [isFlipped, setIsFlipped] = useState(false);
-
-  return (
-    <div className="group perspective h-32 cursor-pointer" onClick={() => setIsFlipped(!isFlipped)}>
-      <div className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
-        <div className={`absolute inset-0 backface-hidden p-4 rounded-xl border flex flex-col justify-between ${bgDark} ${border} shadow-md backdrop-blur-xl transition-all group-hover:bg-white/10 ring-1 ring-white/5`}>
-          <div>
-            <div className="flex justify-between items-start mb-1">
-              <span className="inline-block px-2 py-0.5 bg-black/60 rounded text-[10px] font-black text-amber-400 tracking-widest uppercase border border-amber-500/10">
-                {verse.ref}
-              </span>
-              <Zap className="w-3.5 h-3.5 text-white/10 group-hover:text-amber-400/50 transition-colors" />
-            </div>
-            <h4 className="text-white font-bold text-base leading-tight group-hover:text-amber-200 transition-colors tracking-tight">
-              {verse.summary}
-            </h4>
-          </div>
-          <div className="flex items-center gap-1.5 text-slate-500 text-[10px] font-bold uppercase tracking-widest self-end">
-            <RotateCcw className="w-3 h-3" /> Read
-          </div>
-        </div>
-        <div className={`absolute inset-0 backface-hidden rotate-y-180 p-4 rounded-xl border overflow-hidden ${bgDark} ${border} shadow-lg bg-slate-900 ring-1 ring-white/10`}>
-          <p className="text-slate-100 leading-tight font-serif text-sm italic h-full overflow-y-auto custom-scrollbar">
-            "{verse.full || verse.text}"
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default function App() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [showUnseen, setShowUnseen] = useState(false);
-  const [isPeekMode, setIsPeekMode] = useState(false);
-  const [isMapExpanded, setIsMapExpanded] = useState(false);
-  const [selectedBeing, setSelectedBeing] = useState(null);
-
-  const activeData = COURSE_DATA[activeIndex];
-
-  const navigateTo = (index) => {
-    if (index < 0 || index >= COURSE_DATA.length) return;
-    setActiveIndex(index);
-    setSelectedBeing(null);
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigateTo(activeIndex + 1);
-      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigateTo(activeIndex - 1);
-      if (e.key === 'v') setIsPeekMode(!isPeekMode);
-      if (e.key === 'u') setShowUnseen(!showUnseen);
-      if (e.key === 'Escape') {
-        setIsMapExpanded(false);
-        setShowUnseen(false);
-        setSelectedBeing(null);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeIndex, isPeekMode, showUnseen]);
-
-  return (
-    <div className="h-screen w-full bg-[#020617] text-slate-200 font-sans selection:bg-cyan-500/30 flex flex-col overflow-hidden relative">
-      
-      {/* Visual Background Layers */}
-      <div className="fixed inset-0 z-[60] pointer-events-none opacity-[0.02] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
-      <div 
-        className={`fixed inset-0 z-0 transition-opacity duration-1000 pointer-events-none ${activeData.id === 'overview' ? 'opacity-20' : 'opacity-5'}`}
-        style={{
-          backgroundImage: `linear-gradient(to right, #22d3ee11 1px, transparent 1px), linear-gradient(to bottom, #22d3ee11 1px, transparent 1px)`,
-          backgroundSize: '30px 30px'
-        }}
-      />
-      <div 
-        className={`fixed inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none 
-          ${activeData.id === 'overview' 
-            ? 'opacity-100 scale-100 grayscale-[0.8] contrast-[1.2] brightness-[0.7] invert-[0.9] sepia-[0.5] hue-rotate-[190deg] saturate-[2.5]' 
-            : isPeekMode ? 'opacity-90 scale-105' : 'opacity-20 scale-105 blur-[1px] grayscale-[0.5]'}`}
-        style={{
-          backgroundImage: `url(${COURSE_DATA[0].image})`,
-          backgroundPosition: activeData.bgPosition,
-          backgroundSize: activeData.bgSize,
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      <div className={`fixed inset-0 z-0 bg-[#082f49] transition-opacity duration-1000 pointer-events-none ${activeData.id === 'overview' ? 'opacity-50' : 'opacity-0'}`} />
-
-      {/* Header */}
-      <header className={`relative z-[70] bg-[#020617]/80 backdrop-blur-md border-b border-white/5 px-8 py-3.5 flex justify-between items-center transition-all duration-500 ${isPeekMode ? '-translate-y-20' : 'translate-y-0'}`}>
-        <div className="flex items-center gap-4">
-          {/* Main Logo Integration */}
-          <div className="relative group">
-            <div className="absolute -inset-1.5 bg-cyan-500/20 rounded-full blur opacity-40 group-hover:opacity-100 transition duration-500" />
-            <img 
-              src={CHURCH_LOGO} 
-              alt="Church Logo" 
-              className="relative w-10 h-10 object-contain drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]"
-            />
-          </div>
-          <div className="flex flex-col">
-            <h1 className="text-2xl font-black bg-gradient-to-r from-cyan-300 via-blue-200 to-amber-500 bg-clip-text text-transparent tracking-tighter uppercase leading-none">
-              HOUSE OF THE LORD
-            </h1>
-            <div className="flex items-center gap-3 mt-1.5">
-              <span className="text-xs font-black text-cyan-400 bg-cyan-400/10 px-2 py-0.5 rounded border border-cyan-400/30 uppercase tracking-widest">
-                {activeData.week}
-              </span>
-              <p className="text-slate-500 text-xs tracking-[0.2em] uppercase font-black">Spiritual Architecture V.4</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => setIsPeekMode(!isPeekMode)}
-            className={`p-2.5 rounded-xl transition-all flex items-center gap-2.5 ${isPeekMode ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/40' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
-          >
-            {isPeekMode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            <span className="text-xs font-black tracking-widest uppercase">Visual Focus</span>
-          </button>
-          <div className="w-px h-8 bg-white/10" />
-          <button 
-            onClick={() => setShowUnseen(!showUnseen)}
-            className={`flex items-center gap-3 px-5 py-2.5 rounded-xl text-xs font-black tracking-widest transition-all duration-300 ${
-              showUnseen ? 'bg-amber-500 text-slate-900 shadow-lg' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-            }`}
-          >
-            <Swords className="w-4 h-4" />
-            {showUnseen ? 'CLOSE' : 'UNSEEN REALM'}
-          </button>
-        </div>
-      </header>
-
-      <main className="flex-1 flex overflow-hidden relative">
-        
-        {/* Sidebar */}
-        <aside className={`w-[260px] z-[70] bg-[#020617]/80 backdrop-blur-2xl px-4 py-4 flex flex-col border-r border-white/5 transition-all duration-700 ${isPeekMode ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
-          <div className="flex-1 flex flex-col justify-between overflow-hidden">
-            <div className="space-y-1 relative shrink-0">
-              <div className="absolute left-[16px] top-4 bottom-4 w-px bg-gradient-to-b from-cyan-400 via-blue-500 to-amber-900 opacity-20" />
-              
-              {COURSE_DATA.map((item, index) => {
-                const isActive = activeIndex === index;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => navigateTo(index)}
-                    className={`
-                      group w-full flex items-center gap-3 p-1.5 rounded-lg transition-all duration-300 relative
-                      ${isActive ? 'bg-white/5 shadow-xl ring-1 ring-white/10 scale-[1.03] z-10' : 'hover:bg-white/5 opacity-40 hover:opacity-100'}
-                    `}
-                  >
-                    <div className={`p-1.5 rounded-md transition-transform duration-500 ${isActive ? 'scale-110 shadow-cyan-500/20' : ''} bg-gradient-to-br ${item.gradient}`}>
-                      {React.cloneElement(item.icon, { className: 'w-3.5 h-3.5 text-white' })}
-                    </div>
-                    <div className="text-left flex-1 min-w-0">
-                      <h3 className={`font-black text-xs uppercase tracking-tight truncate ${isActive ? 'text-white' : 'text-slate-400'}`}>
-                        {item.title}
-                      </h3>
-                      <p className="text-[9px] opacity-60 font-black uppercase tracking-wider truncate">{item.subtitle}</p>
-                    </div>
-                    {isActive && <div className="absolute -left-1 w-1 h-4 bg-cyan-400 rounded-full" />}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div 
-              className="mt-4 flex-1 relative group overflow-hidden flex flex-col cursor-pointer"
-              onClick={() => setIsMapExpanded(true)}
-            >
-              <div className="absolute inset-0 bg-cyan-400/10 blur-2xl opacity-10 pointer-events-none" />
-              <div className="flex-1 flex flex-col rounded-xl border border-white/10 overflow-hidden bg-black/40 shadow-xl transition-all hover:border-cyan-500/50 hover:shadow-cyan-500/10">
-                <div className="px-2 py-1 bg-cyan-500/5 border-b border-white/5 flex justify-between items-center shrink-0">
-                  <div className="flex items-center gap-1.5">
-                    <Maximize2 className="w-2.5 h-2.5 text-cyan-400/60" />
-                    <span className="text-[9px] font-black text-cyan-400/70 uppercase tracking-widest">Master Schematic</span>
-                  </div>
-                  <Compass className="w-2.5 h-2.5 text-cyan-500/40" />
-                </div>
-                <div className="flex-1 w-full p-2 flex items-center justify-center bg-slate-950/40 relative group-hover:bg-slate-900/40 transition-colors">
-                  <img 
-                    src={COURSE_DATA[0].image} 
-                    alt="House Blueprint Reference" 
-                    className="max-w-full max-h-full object-contain opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-2 pt-4 mt-4 border-t border-white/5 shrink-0">
-             <button onClick={() => navigateTo(activeIndex - 1)} className="flex-1 p-2 bg-slate-800/40 rounded-lg hover:bg-slate-700 transition-colors flex justify-center"><ChevronUp className="w-4 h-4" /></button>
-             <button onClick={() => navigateTo(activeIndex + 1)} className="flex-1 p-2 bg-slate-800/40 rounded-lg hover:bg-slate-700 transition-colors flex justify-center"><ChevronDown className="w-4 h-4" /></button>
-          </div>
-
-          {/* Sidebar Footer Logo Integration */}
-          <div className="mt-4 pt-4 border-t border-white/5 flex flex-col items-center opacity-30 hover:opacity-100 transition-opacity">
-            <img 
-              src={CHURCH_LOGO} 
-              alt="Church Signature" 
-              className="w-12 h-12 grayscale brightness-200 mb-1" 
-            />
-            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-500">Presented By</span>
-          </div>
-        </aside>
-
-        {/* Content Viewport */}
-        <section className="flex-1 relative overflow-hidden flex flex-col items-center">
-          <MoteOverlay color={activeData.id === 'attic' ? '#f59e0b' : activeData.id === 'basement' ? '#ef4444' : '#22d3ee'} />
-          <AngelFlightOverlay />
-
-          <div 
-            key={activeData.id} 
-            className={`
-              w-full max-w-5xl p-10 flex flex-col h-full overflow-hidden relative z-[70]
-              animate-in fade-in duration-700 ${isPeekMode ? 'opacity-0' : 'opacity-100'}
-            `}
-          >
-            
-            <div className="flex flex-col h-full overflow-hidden">
-              <div className={`pb-6 border-b-2 border-dashed ${activeData.id === 'overview' ? 'border-slate-500/30' : activeData.border} shrink-0`}>
-                <div className="flex items-center gap-6 mb-4">
-                  <div className={`p-4 rounded-2xl bg-gradient-to-br ${activeData.gradient} text-white shadow-xl ring-1 ring-white/20`}>
-                    {React.cloneElement(activeData.icon, { className: 'w-8 h-8' })}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1.5">
-                      <span className="text-xs font-black text-amber-500 bg-amber-500/10 px-3 py-1 rounded uppercase tracking-[0.2em] border border-amber-500/20">{activeData.week}</span>
-                      <span className="text-slate-400 font-black uppercase text-xs tracking-[0.3em]">{activeData.subtitle}</span>
-                    </div>
-                    <h2 className="text-5xl font-black text-white tracking-tighter uppercase italic leading-none">{activeData.title}</h2>
-                  </div>
-                </div>
-                <p className="text-xl text-slate-100 leading-snug font-bold pl-5 border-l-4 border-slate-700 italic tracking-tight mb-4">
-                  {activeData.concept}
-                </p>
-                
-                <div className="flex flex-wrap gap-2 px-5">
-                  <div className="flex items-center gap-2 mr-2 text-cyan-400/80">
-                    <Users className="w-3.5 h-3.5" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-                      {activeData.id === 'overview' ? 'System Context:' : 'Spiritual Beings:'}
-                    </span>
-                  </div>
-                  {activeData.id === 'overview' ? (
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest italic">Beings distributed across specific architectural layers.</p>
-                  ) : (
-                    activeData.beings?.map((being, i) => (
-                      <button 
-                        key={i} 
-                        onClick={() => setSelectedBeing(being)}
-                        className="group flex items-center gap-1.5 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-slate-400 uppercase tracking-wider transition-all hover:bg-cyan-500/20 hover:border-cyan-500/40 hover:text-cyan-100 shadow-inner"
-                      >
-                        <Search className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        {being.name}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              {/* Scripture Card Grid */}
-              <div className="flex-1 py-6 overflow-y-auto custom-scrollbar pr-2">
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
-                  {activeData.verses.map((v, i) => (
-                    <ScriptureCard key={i} verse={v} bgDark={activeData.id === 'overview' ? 'bg-slate-900/60' : activeData.bgDark} border={activeData.id === 'overview' ? 'border-slate-500/30' : activeData.border} />
-                  ))}
-                </div>
-              </div>
-
-              {/* Engagement Inquiry Protocol */}
-              <div className={`${activeData.id === 'overview' ? 'bg-slate-900/60 border-slate-500/20' : 'bg-slate-900/60 border-amber-500/20'} backdrop-blur-2xl border rounded-[32px] p-6 shadow-xl shrink-0 mt-6`}>
-                <h5 className={`text-xs font-black ${activeData.id === 'overview' ? 'text-cyan-400' : 'text-amber-500'} tracking-[0.4em] uppercase mb-4 flex items-center gap-3`}>
-                   {activeData.id === 'overview' ? 'Foundational Exploration' : 'Engagement Inquiry Protocol'} 
-                   <div className={`h-px flex-1 ${activeData.id === 'overview' ? 'bg-cyan-500/10' : 'bg-amber-500/10'}`} />
-                </h5>
-                <div className="grid grid-cols-3 gap-6">
-                   {activeData.discussions.map((d, i) => (
-                     <div key={i} className="flex gap-4 group">
-                        <MessageCircle className={`w-5 h-5 ${activeData.id === 'overview' ? 'text-cyan-400' : 'text-amber-500'} shrink-0 mt-1 opacity-40 group-hover:opacity-100 transition-opacity`} />
-                        <p className="text-sm font-bold text-slate-300 leading-snug italic tracking-tight group-hover:text-white transition-colors">
-                          {d}
-                        </p>
-                     </div>
-                   ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Intelligence Dossier Modal */}
-        {selectedBeing && (
-          <div className="fixed inset-0 z-[300] bg-black/80 backdrop-blur-xl flex items-center justify-center p-8 animate-in fade-in duration-300">
-            <div className="bg-[#020617] border-2 border-cyan-500/30 rounded-[48px] p-10 max-w-2xl w-full relative shadow-3xl overflow-hidden flex flex-col max-h-[85vh]">
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-cyan-500/20 animate-scan pointer-events-none" />
-              <button onClick={() => setSelectedBeing(null)} className="absolute top-8 right-8 p-3 bg-slate-900 border border-white/10 rounded-full text-white hover:bg-white hover:text-black transition-all">✕</button>
-              <div className="flex flex-col items-start mb-8 shrink-0">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-4 bg-cyan-500/10 rounded-2xl border border-cyan-500/40">
-                    <ShieldAlert className="w-8 h-8 text-cyan-400" />
-                  </div>
-                  <div>
-                    <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">{selectedBeing.name}</h2>
-                    <p className="text-cyan-500/60 font-black tracking-[0.4em] uppercase text-[10px] mt-2">Intelligence Briefing // Record_ID_{selectedBeing.name.substring(0,3).toUpperCase()}</p>
-                  </div>
-                </div>
-                <div className="bg-cyan-500/5 border border-cyan-500/20 p-6 rounded-3xl w-full">
-                  <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-widest mb-2">Architectural Role & Context:</h4>
-                  <p className="text-slate-100 text-lg leading-snug font-bold italic tracking-tight">{selectedBeing.context}</p>
-                </div>
-              </div>
-              <div className="flex-1 overflow-y-auto pr-3 custom-scrollbar space-y-6">
-                <h4 className="text-[10px] font-black text-amber-500 uppercase tracking-widest flex items-center gap-3">Biblical Documentation <div className="h-px flex-1 bg-amber-500/20" /></h4>
-                {selectedBeing.scriptures.map((s, i) => (
-                  <div key={i} className="bg-white/5 border border-white/5 p-6 rounded-3xl group hover:bg-white/[0.08] transition-all">
-                    <div className="flex items-center gap-2 mb-3">
-                      <BookOpen className="w-3.5 h-3.5 text-amber-500/50" />
-                      <span className="text-xs font-black text-amber-500 tracking-wider uppercase">{s.ref}</span>
-                    </div>
-                    <p className="text-base italic text-slate-300 font-serif leading-relaxed">"{s.text}"</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Full Schematic Overlay */}
-        {isMapExpanded && (
-          <div className="fixed inset-0 z-[500] bg-[#020617]/90 backdrop-blur-3xl flex items-center justify-center p-8 animate-in fade-in duration-500 cursor-zoom-out" onClick={() => setIsMapExpanded(false)}>
-            <div className="absolute top-8 right-8 flex items-center gap-4 z-[510]">
-              <div className="bg-slate-900/80 px-4 py-2 rounded-xl border border-white/10 text-xs font-black text-cyan-400 tracking-widest uppercase shadow-2xl">Schematic Full Mode</div>
-              <button className="p-3 bg-white text-black rounded-full shadow-2xl hover:scale-110 transition-transform"><X className="w-6 h-6" /></button>
-            </div>
-            <img src={COURSE_DATA[0].image} alt="Full House Blueprint" className="max-w-full max-h-full object-contain animate-in zoom-in duration-500" />
-          </div>
-        )}
-
-        {/* Unseen Realm Overlay */}
-        {showUnseen && (
-          <div className="absolute inset-0 z-[200] bg-[#020617]/95 backdrop-blur-2xl flex items-center justify-center p-8 animate-in fade-in duration-500">
-            <div className="bg-[#020617] border-2 border-amber-500/30 rounded-[40px] p-10 max-w-6xl w-full relative shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-              <button onClick={() => setShowUnseen(false)} className="absolute top-8 right-8 p-3 bg-slate-900 rounded-full border border-white/10 text-white hover:bg-white hover:text-black transition-colors">✕</button>
-              <div className="flex flex-col items-center mb-10 shrink-0">
-                <Swords className="w-14 h-14 text-amber-500 mb-3" />
-                <h2 className="text-5xl font-black text-white italic tracking-tighter uppercase">THE UNSEEN REALM</h2>
-                <p className="text-amber-500/60 font-black tracking-[0.3em] uppercase text-xs">Dimensional Conflict Interface</p>
-              </div>
-              <div className="grid grid-cols-2 gap-10 overflow-y-auto pr-3 custom-scrollbar flex-1">
-                {Object.values(CROSS_CUTTING_DATA).map((theme, i) => (
-                  <div key={i} className="space-y-6 bg-white/5 p-8 rounded-[40px] border border-white/5 h-fit">
-                    <h3 className="text-3xl font-black text-amber-400 italic tracking-tighter uppercase leading-none">{theme.title}</h3>
-                    <p className="text-slate-100 text-xl leading-snug font-black italic tracking-tighter">{theme.concept}</p>
-                    <div className="space-y-4">
-                      {theme.verses.map((v, vi) => (
-                        <div key={vi} className="bg-black/60 p-5 rounded-2xl border border-white/5">
-                          <span className="text-xs font-black text-amber-600 block mb-2 uppercase tracking-wider">{v.ref}</span>
-                          <p className="text-base italic text-slate-300 font-serif leading-relaxed">"{v.text}"</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
-
-      <style>{`
+    <style>
         @keyframes scan { from { top: -5%; } to { top: 105%; } }
         .animate-scan { animation: scan 8s linear infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         .animate-float { animation: float infinite ease-in-out; }
         @keyframes angel-fly {
-          0% { transform: translateY(110vh) scale(0.8); opacity: 0; }
-          10% { opacity: 0.6; }
-          90% { opacity: 0.6; }
-          100% { transform: translateY(-20vh) scale(1.1); opacity: 0; }
+            0% { transform: translateY(110vh) scale(0.8); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) scale(1.1); opacity: 0; }
         }
         .animate-angel-fly { animation: angel-fly linear infinite; }
         .perspective { perspective: 2000px; }
@@ -902,7 +29,397 @@ export default function App() {
         .rotate-y-180 { transform: rotateY(180deg); }
         .custom-scrollbar::-webkit-scrollbar { width: 5px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.2); border-radius: 10px; }
-      `}</style>
-    </div>
-  );
-}
+        body { background-color: #020617; margin: 0; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { 
+            Cloud, Moon, Sun, Crown, Waves, ArrowDownCircle, Sparkles, Swords, 
+            BookOpen, Info, Map, RotateCcw, Eye, EyeOff, ChevronUp, ChevronDown, 
+            Compass, Zap, MessageCircle, X, Maximize2, Users, Search, ShieldAlert 
+        } = lucideReact;
+
+        // --- ASSETS ---
+        const CHURCH_LOGO = "https://www.dropbox.com/scl/fi/brntptlhom2rd3o0q4adu/Png.png?rlkey=dbwie5kif5j9g4gt0rhr1p03o&st=diczpn53&raw=1";
+
+        // --- DATA MODEL (Canonical/Chronological) ---
+        const COURSE_DATA = [
+            {
+                id: 'overview',
+                week: 'Intro',
+                title: "Heaven's Blueprint",
+                subtitle: "System Architecture",
+                icon: <Map size={16} />,
+                gradient: 'from-slate-600 via-slate-700 to-indigo-950',
+                border: 'border-slate-500/30',
+                concept: 'The House of the LORD is more than a model; it is the master-template of reality. By decoding this ancient architectural vision, we rediscover our legal standing in the courts of heaven and our defensive posture against the chaos of the deep.',
+                image: 'https://www.dropbox.com/scl/fi/xnuw7xls8jz6vx152fiqd/image_1776073937577.jpeg?rlkey=evoye92pju47ybe0i64lb1ox9&st=472o5p5v&raw=1',
+                verses: [
+                    { ref: 'Deu 10:14', summary: 'Heaven of Heavens.', full: 'Behold, to the Lord your God belong heaven and the heaven of heavens, the earth with all that is in it.' },
+                    { ref: '1 Kings 8:27', summary: 'Beyond Containment.', full: 'But will God indeed dwell on the earth? Behold, heaven and the highest heaven cannot contain you.' },
+                    { ref: '2 Chron 2:6', summary: 'Infinite Scope.', full: 'But who is able to build him a house, since heaven, even highest heaven, cannot contain him?' },
+                    { ref: 'Nehemiah 9:6', summary: 'The Preserver of All.', full: 'You are the Lord, you alone. You have made heaven, the heaven of heavens, with all their host.' },
+                    { ref: 'Psalm 148:4', summary: 'Highest Heights.', full: 'Praise him, you highest heavens, and you waters above the heavens!' }
+                ],
+                beings: [],
+                discussions: [
+                    'How does having a visual "map" of the cosmos change the way you read individual Bible stories?',
+                    'Why do you think ancient people thought of the world in "stories" rather than just a flat physical plane?',
+                    'If the House of the LORD is the blueprint for reality, how does your schedule align with its priorities?'
+                ],
+                bgPosition: 'center 40%',
+                bgSize: 'cover'
+            },
+            {
+                id: 'firstFloor',
+                week: 'Week 1',
+                title: 'First Floor',
+                subtitle: "Atmospheric Horizon",
+                icon: <Cloud size={16} />,
+                gradient: 'from-sky-300 via-blue-500 to-cyan-600',
+                bgDark: 'bg-sky-900/20',
+                border: 'border-sky-400/40',
+                concept: 'The immediate interface. The breathable space where divine providence meets human necessity.',
+                verses: [
+                    { ref: 'Gen 1:6–8', summary: 'The Firmament.', full: 'God said, "Let there be an expanse in the midst of the waters... And God called the expanse Heaven."' },
+                    { ref: 'Gen 19:1', summary: 'The Angelos.', full: 'The two angels came to Sodom in the evening, and Lot was sitting in the gate of Sodom.' },
+                    { ref: 'Ps 91:11', summary: 'Guardian Spirits.', full: 'For he will command his angels concerning you to guard you in all your ways.' },
+                    { ref: 'Ps 104:4', summary: 'Wind Spirits.', full: 'He makes his messengers winds, his ministers a flaming fire.' },
+                    { ref: 'Acts 1:9', summary: 'The Cloud Portal.', full: 'He was lifted up, and a cloud took him out of their sight.' },
+                    { ref: '1 Thess 4:17', summary: 'Meeting in the Air.', full: 'Then we who are alive... will be caught up together with them in the clouds to meet the Lord in the air.' }
+                ],
+                beings: [
+                    { name: "Angelos (Messengers)", context: "The most common contact for humans. They function as logistical agents.", scriptures: [{ ref: "Gen 19:1", text: "The two angels came to Sodom..." }, { ref: "Ps 91:11", text: "He will command his angels..." }] },
+                    { name: "Guardian Spirits", context: "Assigned to protect and represent specific groups on the earthly plane.", scriptures: [{ ref: "Gen 48:16", text: "The angel who has redeemed me..." }, { ref: "Matt 18:10", text: "Their angels always see the face of my Father." }] },
+                    { name: "Wind Spirits", context: "Spiritual forces manifested through natural elements.", scriptures: [{ ref: "Ps 104:4", text: "He makes his messengers winds..." }, { ref: "Heb 1:7", text: "He makes his angels winds..." }] }
+                ],
+                discussions: ['Why is the sky the primary place we look for signs?', 'How does the atmosphere reflect God’s care?', 'How can we tune into "Cloud Portals" today?'],
+                bgPosition: 'center 56%',
+                bgSize: '380%'
+            },
+            {
+                id: 'secondFloor',
+                week: 'Week 2',
+                title: 'Second Floor',
+                subtitle: "Celestial Expanse",
+                icon: <Moon size={16} />,
+                gradient: 'from-indigo-600 via-purple-800 to-black',
+                bgDark: 'bg-indigo-900/40',
+                border: 'border-indigo-500/40',
+                concept: 'The cosmic buffer. A display of mathematical precision and magnitude.',
+                verses: [
+                    { ref: 'Gen 1:16', summary: 'Two Great Lights.', full: 'And God made the two great lights—the greater light to rule the day and the lesser light to rule the night—and the stars.' },
+                    { ref: 'Job 38:7', summary: 'The Morning Stars.', full: 'When the morning stars sang together and all the sons of God shouted for joy?' },
+                    { ref: 'Ps 19:1', summary: 'Celestial Proclamation.', full: 'The heavens declare the glory of God, and the sky above proclaims his handiwork.' },
+                    { ref: 'Ps 147:4', summary: 'Host by Number.', full: 'He determines the number of the stars; he gives to all of them their names.' },
+                    { ref: 'Isa 40:26', summary: 'Celestial Hosts.', full: 'Lift up your eyes on high and see: who created these? He who brings out their host by number.' },
+                    { ref: 'Dan 4:17', summary: 'The Watchers (Irîn).', full: 'The sentence is by the decree of the watchers, the decision by the word of the holy ones.' }
+                ],
+                beings: [
+                    { name: "Morning Stars", context: "Primordial celestial beings who celebrated the foundation of the world.", scriptures: [{ ref: "Job 38:7", text: "When the morning stars sang together..." }] },
+                    { name: "Irîn (The Watchers)", context: "High-ranking sentinels with monitoring assignments.", scriptures: [{ ref: "Dan 4:13", text: "Behold, a watcher, a holy one, came down..." }] },
+                    { name: "Celestial Hosts", context: "Spiritual identities associated with planetary bodies.", scriptures: [{ ref: "Isa 40:26", text: "He brings out their host by number..." }] }
+                ],
+                discussions: ['What does naming stars tell you about God’s attention?', 'Does vastness make God feel far or capable?', 'Does viewing stars as a "host" change your view of random events?'],
+                bgPosition: 'center 40%',
+                bgSize: '350%'
+            },
+            {
+                id: 'thirdFloor',
+                week: 'Week 3',
+                title: 'Third Floor',
+                subtitle: "The Kingdom Domain",
+                icon: <Sparkles size={16} />,
+                gradient: 'from-blue-300 via-sky-500 to-indigo-700',
+                bgDark: 'bg-blue-900/20',
+                border: 'border-blue-400/40',
+                concept: 'The administrative realm where believers are positioned legally alongside the King.',
+                verses: [
+                    { ref: 'Job 1:6', summary: 'Sons of God.', full: 'Now there was a day when the sons of God came to present themselves before the Lord.' },
+                    { ref: 'Ps 103:21', summary: 'Host of Heaven.', full: 'Bless the Lord, all his hosts, his ministers, who do his will!' },
+                    { ref: 'Dan 10:13', summary: 'Archangelos.', full: 'But Michael, one of the chief princes, came to help me.' },
+                    { ref: 'John 14:2', summary: 'My Father\'s House.', full: 'In my Father\'s house are many rooms... I go to prepare a place for you.' },
+                    { ref: 'Eph 2:6', summary: 'Seated With Him.', full: 'He raised us up with him and seated us with him in the heavenly places in Christ Jesus.' },
+                    { ref: 'Heb 12:22', summary: 'City of the Living God.', full: 'But you have come to Mount Zion and to the city of the living God.' }
+                ],
+                beings: [
+                    { name: "The Host of Heaven", context: "The vast military and administrative array under God's command.", scriptures: [{ ref: "Ps 103:21", text: "Bless the Lord, all his hosts..." }] },
+                    { name: "Archangelos (Chief Princes)", context: "High-tier commanders who represent nations and lead warfare.", scriptures: [{ ref: "Dan 10:13", text: "Michael, one of the chief princes..." }] },
+                    { name: "Sons of God", context: "Inner circle (Bene Elohim) reporting directly to the Father.", scriptures: [{ ref: "Job 1:6", text: "The sons of God came to present themselves..." }] }
+                ],
+                discussions: ['Why do we live like we are in the Basement?', 'How does a "prepared place" change belonging?', 'What embassy powers should you exercise today?'],
+                bgPosition: 'center 22%',
+                bgSize: '350%'
+            },
+            {
+                id: 'attic',
+                week: 'Week 4',
+                title: 'The Attic',
+                subtitle: "Divine Command Center",
+                icon: <Crown size={20} />,
+                gradient: 'from-amber-200 via-yellow-400 to-amber-700',
+                bgDark: 'bg-amber-900/20',
+                border: 'border-amber-500/40',
+                concept: 'The highest point. The source of sovereign decree and unceasing worship.',
+                verses: [
+                    { ref: 'Gen 3:24', summary: 'The Cherubim.', full: 'He placed the cherubim and a flaming sword to guard the way.' },
+                    { ref: '1 Kings 22:19', summary: 'The Divine Council.', full: 'I saw the Lord sitting on his throne, and all the host of heaven standing beside him.' },
+                    { ref: 'Isa 6:2', summary: 'The Seraphim.', full: 'Above him stood the seraphim. Each had six wings.' },
+                    { ref: 'Eze 10:12', summary: 'The Ophanim (Wheels).', full: 'The wheels were full of eyes all around.' },
+                    { ref: 'Rev 4:4', summary: 'The 24 Elders.', full: 'Around the throne were twenty-four thrones.' },
+                    { ref: 'Rev 4:6-7', summary: 'The Zoa (Living Creatures).', full: 'Four living creatures, like a lion, an ox, a man, and an eagle.' }
+                ],
+                beings: [
+                    { name: "Cherubim", context: "Guardians of divine presence and structural bearers of glory.", scriptures: [{ ref: "Gen 3:24", text: "He placed the cherubim..." }] },
+                    { name: "Divine Council", context: "The deliberative assembly participating in the King's decrees.", scriptures: [{ ref: "Ps 82:1", text: "God has taken his place in the divine council..." }] },
+                    { name: "Seraphim", context: "Creatures of intense light guarding the holiness of the Throne.", scriptures: [{ ref: "Isa 6:2", text: "Above him stood the seraphim..." }] },
+                    { name: "Ophanim", context: "Wheels representing the mobility and omnipresence of the Throne.", scriptures: [{ ref: "Eze 1:15", text: "I saw a wheel on the earth..." }] },
+                    { name: "The 24 Elders", context: "High-ranking representatives surrounding the central Throne.", scriptures: [{ ref: "Rev 4:4", text: "Twenty-four thrones and twenty-four elders..." }] },
+                    { name: "The Zoa", context: "Representatives of all creation stationed at the center.", scriptures: [{ ref: "Rev 4:6", text: "Four living creatures, full of eyes..." }] }
+                ],
+                discussions: ['What is the relationship between the Throne and worship?', 'How is this the command center?', 'How would your perspective shift if you started in this frequency?'],
+                bgPosition: 'center 5%',
+                bgSize: '350%'
+            },
+            {
+                id: 'basement',
+                week: 'Week 5',
+                title: 'The Basement',
+                subtitle: "The Subterranean Abyss",
+                icon: <ArrowDownCircle size={16} />,
+                gradient: 'from-orange-700 via-red-900 to-black',
+                bgDark: 'bg-red-900/40',
+                border: 'border-orange-700/40',
+                concept: 'The structural foundations of judgment. The realm of Sheol.',
+                verses: [
+                    { ref: 'Num 16:33', summary: 'Subterranean Descent.', full: 'They went down alive into Sheol, and the earth closed over them.' },
+                    { ref: 'Job 26:6', summary: 'The Destroyer Abaddon.', full: 'Sheol is naked before God, and Abaddon has no covering.' },
+                    { ref: 'Ps 139:8', summary: 'Omnipresent Reach.', full: 'If I make my bed in Sheol, you are there!' },
+                    { ref: 'Isa 14:9', summary: 'Shades in Sheol.', full: 'Sheol beneath is stirred up to rouse the shades to greet you.' },
+                    { ref: 'Jonah 2:6', summary: 'Roots of Mountains.', full: 'I went down to the land whose bars closed upon me forever.' },
+                    { ref: 'Rev 1:18', summary: 'Keys of Death.', full: 'I have the keys of Death and Hades.' }
+                ],
+                beings: [
+                    { name: "Shades (Rephaim)", context: "The spirits of the deceased inhabiting the depths of Sheol.", scriptures: [{ ref: "Ps 88:10", text: "Do the shades rise up to praise you?" }] },
+                    { name: "Abaddon", context: "The angel of the bottomless pit and personification of destruction.", scriptures: [{ ref: "Rev 9:11", text: "They have as king the angel of the bottomless pit..." }] }
+                ],
+                discussions: ['How does Christ’s descent redefine fear of death?', 'Why does God hold the keys?', 'What shadow self is He ready to reclaim?'],
+                bgPosition: 'center 76%',
+                bgSize: '400%'
+            },
+            {
+                id: 'lake',
+                week: 'Week 6',
+                title: 'The Lake',
+                subtitle: "The Marine Kingdom",
+                icon: <Waves size={16} />,
+                gradient: 'from-teal-600 via-cyan-800 to-blue-950',
+                bgDark: 'bg-teal-900/40',
+                border: 'border-teal-500/40',
+                concept: 'External chaos. Deep waters where spirits of rebellion reside.',
+                verses: [
+                    { ref: 'Job 41:1', summary: 'Leviathan.', full: 'Can you draw out Leviathan with a fishhook?' },
+                    { ref: 'Ps 74:13', summary: 'Sea Monster Heads.', full: 'You broke the heads of the sea monsters on the waters.' },
+                    { ref: 'Ps 89:9', summary: 'Raging Sea.', full: 'You rule the raging of the sea; when its waves rise, you still them.' },
+                    { ref: 'Ps 104:25', summary: 'Sea Great and Wide.', full: 'The sea which teems with creatures innumerable.' },
+                    { ref: 'Isa 51:9', summary: 'Rahab the Dragon.', full: 'Was it not you who cut Rahab in pieces?' },
+                    { ref: 'Rev 13:1', summary: 'Beast from Sea.', full: 'I saw a beast rising out of the sea.' }
+                ],
+                beings: [
+                    { name: "Leviathan", context: "The twisting serpent representing primordial chaos.", scriptures: [{ ref: "Isa 27:1", text: "He will punish Leviathan the fleeing serpent..." }] },
+                    { name: "Rahab", context: "A symbol of national rebellion and cosmic dragon.", scriptures: [{ ref: "Ps 89:10", text: "You crushed Rahab like a carcass..." }] }
+                ],
+                discussions: ['Why is the Lake a metaphor for rebellion?', 'House (Order) vs Lake (Chaos): where is your focus?', 'If Leviathan is a pet, why fear the "seas" of culture?'],
+                bgPosition: '90% 90%',
+                bgSize: '400%'
+            }
+        ];
+
+        // --- COMPONENTS ---
+        const MoteOverlay = ({ color }) => (
+            <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden opacity-20">
+                {[...Array(15)].map((_, i) => (
+                    <div key={i} className="absolute rounded-full blur-[1px] animate-float"
+                        style={{
+                            width: Math.random() * 3 + 'px', height: Math.random() * 3 + 'px',
+                            backgroundColor: color || '#fff', left: Math.random() * 100 + '%', top: Math.random() * 100 + '%',
+                            animationDuration: Math.random() * 10 + 10 + 's', animationDelay: Math.random() * 5 + 's'
+                        }}
+                    />
+                ))}
+            </div>
+        );
+
+        const ScriptureCard = ({ verse, bgDark, border }) => {
+            const [isFlipped, setIsFlipped] = useState(false);
+            return (
+                <div className="group perspective h-32 cursor-pointer" onClick={() => setIsFlipped(!isFlipped)}>
+                    <div className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+                        <div className={`absolute inset-0 backface-hidden p-4 rounded-xl border flex flex-col justify-between ${bgDark} ${border} shadow-md backdrop-blur-xl transition-all group-hover:bg-white/10 ring-1 ring-white/5`}>
+                            <div>
+                                <div className="flex justify-between items-start mb-1">
+                                    <span className="inline-block px-2 py-0.5 bg-black/60 rounded text-[10px] font-black text-amber-400 tracking-widest uppercase border border-amber-500/10">
+                                        {verse.ref}
+                                    </span>
+                                    <Zap size={14} className="text-white/10 group-hover:text-amber-400/50 transition-colors" />
+                                </div>
+                                <h4 className="text-white font-bold text-base leading-tight group-hover:text-amber-200 transition-colors tracking-tight">
+                                    {verse.summary}
+                                </h4>
+                            </div>
+                            <div className="flex items-center gap-1.5 text-slate-500 text-[10px] font-bold uppercase tracking-widest self-end">
+                                <RotateCcw size={12} /> Read
+                            </div>
+                        </div>
+                        <div className={`absolute inset-0 backface-hidden rotate-y-180 p-4 rounded-xl border overflow-hidden ${bgDark} ${border} shadow-lg bg-slate-900 ring-1 ring-white/10`}>
+                            <p className="text-slate-100 leading-tight font-serif text-sm italic h-full overflow-y-auto custom-scrollbar">
+                                "{verse.full || verse.text}"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        function App() {
+            const [activeIndex, setActiveIndex] = useState(0);
+            const [showUnseen, setShowUnseen] = useState(false);
+            const [isPeekMode, setIsPeekMode] = useState(false);
+            const [selectedBeing, setSelectedBeing] = useState(null);
+            const activeData = COURSE_DATA[activeIndex];
+
+            const navigateTo = (index) => {
+                if (index < 0 || index >= COURSE_DATA.length) return;
+                setActiveIndex(index);
+                setSelectedBeing(null);
+            };
+
+            return (
+                <div className="h-screen w-full text-slate-200 font-sans selection:bg-cyan-500/30 flex flex-col overflow-hidden relative">
+                    <div className="fixed inset-0 z-0 transition-all duration-1000 ease-in-out pointer-events-none 
+                        opacity-20 scale-105 blur-[1px] grayscale-[0.5]"
+                        style={{
+                            backgroundImage: `url(${activeData.image || COURSE_DATA[0].image})`,
+                            backgroundPosition: activeData.bgPosition, backgroundSize: activeData.bgSize, backgroundRepeat: 'no-repeat'
+                        }}
+                    />
+
+                    {/* Header */}
+                    <header className={`relative z-[70] bg-[#020617]/80 backdrop-blur-md border-b border-white/5 px-8 py-3.5 flex justify-between items-center transition-all duration-500 ${isPeekMode ? '-translate-y-20' : ''}`}>
+                        <div className="flex items-center gap-4">
+                            <div className="relative group">
+                                <div className="absolute -inset-1.5 bg-cyan-500/20 rounded-full blur opacity-40 group-hover:opacity-100" />
+                                <img src={CHURCH_LOGO} alt="Logo" className="relative w-10 h-10 object-contain" />
+                            </div>
+                            <div className="flex flex-col">
+                                <h1 className="text-2xl font-black bg-gradient-to-r from-cyan-300 via-blue-200 to-amber-500 bg-clip-text text-transparent tracking-tighter uppercase leading-none">HOUSE OF THE LORD</h1>
+                                <div className="flex items-center gap-3 mt-1.5">
+                                    <span className="text-xs font-black text-cyan-400 bg-cyan-400/10 px-2 py-0.5 rounded border border-cyan-400/30 uppercase tracking-widest">{activeData.week}</span>
+                                    <p className="text-slate-500 text-[10px] tracking-[0.2em] uppercase font-black">Spiritual Architecture V.4</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <button onClick={() => setIsPeekMode(!isPeekMode)} className={`p-2.5 rounded-xl transition-all flex items-center gap-2.5 ${isPeekMode ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>
+                                {isPeekMode ? <EyeOff size={16} /> : <Eye size={16} />}
+                                <span className="text-xs font-black tracking-widest uppercase">Visual Focus</span>
+                            </button>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 flex overflow-hidden relative">
+                        {/* Sidebar */}
+                        <aside className={`w-[260px] z-[70] bg-[#020617]/80 backdrop-blur-2xl px-4 py-4 flex flex-col border-r border-white/5 transition-all duration-700 ${isPeekMode ? '-translate-x-full opacity-0' : ''}`}>
+                            <div className="flex-1 space-y-1 overflow-hidden">
+                                {COURSE_DATA.map((item, index) => (
+                                    <button key={item.id} onClick={() => navigateTo(index)} 
+                                        className={`group w-full flex items-center gap-3 p-1.5 rounded-lg transition-all ${activeIndex === index ? 'bg-white/5 scale-[1.03]' : 'opacity-40 hover:opacity-100'}`}>
+                                        <div className={`p-1.5 rounded-md bg-gradient-to-br ${item.gradient}`}>
+                                            {React.cloneElement(item.icon, { className: 'text-white' })}
+                                        </div>
+                                        <div className="text-left flex-1 min-w-0">
+                                            <h3 className={`font-black text-[10px] uppercase truncate ${activeIndex === index ? 'text-white' : 'text-slate-400'}`}>{item.title}</h3>
+                                            <p className="text-[8px] opacity-60 font-black uppercase tracking-wider">{item.subtitle}</p>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="mt-4 pt-4 border-t border-white/5 flex flex-col items-center opacity-30 hover:opacity-100 transition-opacity">
+                                <img src={CHURCH_LOGO} alt="Signature" className="w-10 h-10 grayscale brightness-200 mb-1" />
+                                <span className="text-[7px] font-black uppercase tracking-[0.3em] text-slate-500">Presented By</span>
+                            </div>
+                        </aside>
+
+                        {/* Content */}
+                        <section className="flex-1 relative overflow-hidden flex flex-col items-center">
+                            <MoteOverlay color={activeData.id === 'attic' ? '#f59e0b' : activeData.id === 'basement' ? '#ef4444' : '#22d3ee'} />
+                            <div className={`w-full max-w-5xl p-10 flex flex-col h-full overflow-hidden relative z-[70] transition-opacity duration-700 ${isPeekMode ? 'opacity-0' : 'opacity-100'}`}>
+                                <div className={`pb-6 border-b-2 border-dashed ${activeData.id === 'overview' ? 'border-slate-500/30' : activeData.border} shrink-0`}>
+                                    <div className="flex items-center gap-6 mb-4">
+                                        <div className={`p-4 rounded-2xl bg-gradient-to-br ${activeData.gradient} text-white shadow-xl ring-1 ring-white/20`}>
+                                            {React.cloneElement(activeData.icon, { size: 32 })}
+                                        </div>
+                                        <div className="flex-1">
+                                            <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none">{activeData.title}</h2>
+                                            <p className="text-xl text-slate-100 leading-snug font-bold italic tracking-tight mt-2">{activeData.concept}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 px-5">
+                                        <div className="flex items-center gap-2 mr-2 text-cyan-400/80">
+                                            <Users size={14} />
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Spiritual Beings:</span>
+                                        </div>
+                                        {activeData.beings?.map((being, i) => (
+                                            <button key={i} onClick={() => setSelectedBeing(being)}
+                                                className="group flex items-center gap-1.5 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-slate-400 uppercase tracking-wider hover:bg-cyan-500/20">
+                                                <Search size={10} className="opacity-0 group-hover:opacity-100" />
+                                                {being.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 py-6 overflow-y-auto custom-scrollbar pr-2">
+                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
+                                        {activeData.verses.map((v, i) => (
+                                            <ScriptureCard key={i} verse={v} bgDark={activeData.bgDark || 'bg-slate-900/60'} border={activeData.border} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Modal */}
+                        {selectedBeing && (
+                            <div className="fixed inset-0 z-[300] bg-black/80 backdrop-blur-xl flex items-center justify-center p-8">
+                                <div className="bg-[#020617] border-2 border-cyan-500/30 rounded-[40px] p-10 max-w-2xl w-full relative max-h-[85vh] flex flex-col">
+                                    <button onClick={() => setSelectedBeing(null)} className="absolute top-8 right-8 text-white hover:text-cyan-400">✕</button>
+                                    <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase mb-4">{selectedBeing.name}</h2>
+                                    <div className="bg-cyan-500/5 border border-cyan-500/20 p-6 rounded-2xl mb-6">
+                                        <p className="text-slate-100 text-lg leading-snug font-bold italic tracking-tight">{selectedBeing.context}</p>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto custom-scrollbar space-y-4">
+                                        {selectedBeing.scriptures.map((s, i) => (
+                                            <div key={i} className="bg-white/5 p-4 rounded-xl">
+                                                <span className="text-xs font-black text-amber-500 uppercase">{s.ref}</span>
+                                                <p className="italic text-slate-300 mt-2 font-serif leading-relaxed">"{s.text}"</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </main>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
